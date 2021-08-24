@@ -1,0 +1,21 @@
+{
+  "name": "drone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 1",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rsync": "^0.6.1",
+    "shelljs": "^0.8.4"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "yargs": "^17.1.1"
+  }
+}
