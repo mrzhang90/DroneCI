@@ -18,15 +18,3 @@ steps:
     image: node:14.17.5-alpine3.14
     commands:
       - npm run docs:build
-
-  - name: rsync
-    image: drillster/drone-rsync
-    settings:
-      user: root
-      key:
-        from_secret: rsync_key
-      hosts:
-        - 39.105.19.96
-      source: ./docs/.vuepress/dist/*
-      target: /doc
-      secrets: [rsync_key]
