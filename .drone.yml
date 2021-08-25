@@ -30,7 +30,7 @@ steps:
       hosts:
         - 39.105.19.96
       # 来源项目目录
-      source: ./docs/.vuepress/dist/*
+      source: docs/.vuepress/dist/*
       # 目标服务器目录
       target: /doc
       # rsync_key 就是添加密钥时的名字，pipelines会去配置中找这个密钥的值
