@@ -12,7 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "rsync": "^0.6.1",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "vuepress": "^1.8.2"
   },
   "dependencies": {
     "colors": "^1.4.0",

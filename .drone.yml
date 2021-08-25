@@ -14,7 +14,24 @@ steps:
     commands:
       - npm run test
 
-  - name: bild
+  - name: build
     image: node:14.17.5-alpine3.14
     commands:
       - npm run docs:build
+
+  - name: rsync
+    image: drillster/drone-rsync
+    settings:
+      user: root
+      key:
+        # Drone服务器连接项目服务器，所以这里需要密钥，放到这里担心不安全，可以把本地的密匙配置到Drone server上
+        # rsync_key 就是添加密钥时的名字
+        from_secret: rsync_key
+      hosts:
+        - 39.105.19.96
+      # 来源项目目录
+      source: ./docs/.vuepress/dist/*
+      # 目标服务器目录
+      target: /doc
+      # rsync_key 就是添加密钥时的名字，pipelines会去配置中找这个密钥的值
+      secrets: [rsync_key]
