@@ -1,0 +1,10 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: npm install
+    image: node:14.17.5-alpine3.14
+    commands:
+      - npm i --registry=https://registry.npm.taobao.org
