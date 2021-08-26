@@ -36,7 +36,7 @@ steps:
       # rsync_key 就是添加密钥时的名字，pipelines会去配置中找这个密钥的值
       secrets: [rsync_key]
     when:
-      targer:
+      target:
         - production
       event:
         - promote
@@ -58,7 +58,7 @@ steps:
       # rsync_key 就是添加密钥时的名字，pipelines会去配置中找这个密钥的值
       secrets: [rsync_key]
     when:
-      targer:
+      target:
         - staging
       event:
         - promote
