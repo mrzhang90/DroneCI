@@ -1,4 +1,7 @@
-Drone 流程：
+## 上线
+node scripts/deploy.js test01
+
+## Drone 流程：
 
 1. Github repo
 

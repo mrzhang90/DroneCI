@@ -1,5 +1,3 @@
 # zhang guang sen
 
-node scripts/deploy.js
-
-.drone.yml 配置成功
+记录技术提升的点点滴滴
