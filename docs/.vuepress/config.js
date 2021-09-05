@@ -5,7 +5,7 @@ module.exports = {
     search: false,
     sidebar: [
       ['/','主页'],
-      ['/about/','关于我们'],
+      ['/droneCI/','CD实战 droneCI'],
     ],
   },
 };
