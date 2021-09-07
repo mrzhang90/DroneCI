@@ -1,21 +1,37 @@
+---
+title: Drone CI
+date: 2021-09-07 11:53:24
+permalink: /pages/662bc9/
+categories:
+  - droneCI
+tags:
+  -
+---
+
 ## 目标
-1. 前端自动化构建部署从0-1(nginx)
-2. 熟悉Drone的基本原理
-3. 使用Drone构建部署前端应用
-4. 使用Drone CLI Promote指定环境
-5. 具备基于Drone API 的运维系统开发能力
+
+1. 前端自动化构建部署从 0-1(nginx)
+2. 熟悉 Drone 的基本原理
+3. 使用 Drone 构建部署前端应用
+4. 使用 Drone CLI Promote 指定环境
+5. 具备基于 Drone API 的运维系统开发能力
 
 ## 环境
+
 准备三台机子
+
 ```
 39.105.19.96    //阿里云服务器，项目服务器
 172.16.102.130  //centos虚拟机1，做Drone服务器
 172.16.102.131  //ubuntu虚拟机2，做Drone客户端
 ```
-## rsync 与 scp
-rsync 与 scp 都可以传输文件到服务器，rsync对文件做MD5对比，只上传差异文件，优先使用rsync
 
-## 安装nginx
+## rsync 与 scp
+
+rsync 与 scp 都可以传输文件到服务器，rsync 对文件做 MD5 对比，只上传差异文件，优先使用 rsync
+
+## 安装 nginx
+
 ```
 yum install nginx
 systemctl start nginx
@@ -24,39 +40,51 @@ systemctl start nginx
 ## [Drone](https://docs.drone.io/) 原理
 
 1. Github repo
-    - Push 代码时，推动到 Drone server master 远程服务器
+
+   - Push 代码时，推动到 Drone server master 远程服务器
 
 2. Drone server master
-    - 把任务写到 Drone server 数据库(Databse)
+
+   - 把任务写到 Drone server 数据库(Databse)
 
 3. Drone agent（代理服务器）
-    - 代理服务器监听到数据库变化，代理服务器通过 RPC 把任务发给 Drone server master
-    - 代理服务器可以有多台
+   - 代理服务器监听到数据库变化，代理服务器通过 RPC 把任务发给 Drone server master
+   - 代理服务器可以有多台
 
 PS:一个 Drone 服务器只能对象一个 git 代码源
 
-## 安装Docker、drone
+## 安装 Docker、drone
+
 安装必要的系统工具
+
 ```
 yum install -y yum-utils device-mapper-persistent-data lvm2
 ```
+
 添加软件源
+
 ```
 # 直接用yum安装是找不到docker-ce的，所以要先安装dorker-ce
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 ```
-更新yum缓存
+
+更新 yum 缓存
+
 ```
 # yum makecache fast
 # centos8没有该参数fast参数，所以直接去掉即可
 yum makecache
 ```
-安装docker
+
+安装 docker
+
 ```
 # docker-ce 是免费的社区版
 yum -y install docker-ce
 ```
+
 配置国内镜像源
+
 ```
 curl -ssl http://oyh1cogl9.bkt.clouddn.com/setmirror.sh | sh -s <镜像加速地址>
 curl -sSL http://oyh1cogl9.bkt.clouddn.com/setmirror.sh | sh -s http://dockerhub.azk8s.cn #Azure
@@ -66,23 +94,26 @@ curl -sSL http://oyh1cogl9.bkt.clouddn.com/setmirror.sh | sh -s http://dockerhub
 # 重启docker
 sudo systemctl restart docker
 ```
+
 [Github-创建 OAuth 应用程序](https://docs.drone.io/server/provider/github/)
 
-进入Settings / Developer settings，然后OAuth Apps，点击按钮“Register a new OAuth application”
+进入 Settings / Developer settings，然后 OAuth Apps，点击按钮“Register a new OAuth application”
 
 **以下是我的项目示例，根据自己的实际情况**
 ![image.png](../statics/images/drone1.png)
 
-**创建成功后，可以得到客户端ID、客户端密钥**
+**创建成功后，可以得到客户端 ID、客户端密钥**
 ![image.png](../statics/images/drone2.png)
 
-#### [Drone Server - Docker镜像下载](https://docs.drone.io/server/provider/github/)
+#### [Drone Server - Docker 镜像下载](https://docs.drone.io/server/provider/github/)
+
     docker pull drone/drone:2
 
-#### 生成环境下，可以用openssl生成一个随机密钥
+#### 生成环境下，可以用 openssl 生成一个随机密钥
+
     openssl rand -hex 16
 
-#### 启动Drone Server
+#### 启动 Drone Server
 
 ```
 docker run \
@@ -106,7 +137,8 @@ docker run \
   drone/drone:2
 ```
 
-遇到报错，说docker container冲突了，那么
+遇到报错，说 docker container 冲突了，那么
+
 ```
 # 查询所有容器
 docker container ls -all
@@ -114,21 +146,24 @@ docker container ls -all
 docker container rm 容器ID
 ```
 
-## 运行Deone服务端
+## 运行 Deone 服务端
+
 1. 访问地址
-    http://172.16.102.130/
-2. 正常会跳到welcome或login路由，正常登录即可
-3. 然后会刷新出github所有项目，找到要配置CI的项目，点击进去
+   http://172.16.102.130/
+2. 正常会跳到 welcome 或 login 路由，正常登录即可
+3. 然后会刷新出 github 所有项目，找到要配置 CI 的项目，点击进去
 4. 激活，点击按钮“ACTIVATE REPOSITORY”
 
-    激活的逻辑，是因为drone拿到github权限，drone会在github项目的settings->webhooks，加一条webhooks配置,这样当我们推代码、打tag、Merge Request时，会给这个webhooks地址推送event，此时droneCI会收到通知，知道github仓库发生变化了，DroneCI就会执行一系列的操作
-    
+   激活的逻辑，是因为 drone 拿到 github 权限，drone 会在 github 项目的 settings->webhooks，加一条 webhooks 配置,这样当我们推代码、打 tag、Merge Request 时，会给这个 webhooks 地址推送 event，此时 droneCI 会收到通知，知道 github 仓库发生变化了，DroneCI 就会执行一系列的操作
+
 ## [Drone Pipelines](https://docs.drone.io/pipeline/overview/)
-Drone管道，可根据文档配置.yaml文件
 
-yaml是类json格式，最终编译还是要转成json格式
+Drone 管道，可根据文档配置.yaml 文件
 
-[node版本，选择合适的 docker 镜像版本](https://hub.docker.com/_/node?tab=tags&page=1&ordering=last_updated)
+yaml 是类 json 格式，最终编译还是要转成 json 格式
+
+[node 版本，选择合适的 docker 镜像版本](https://hub.docker.com/_/node?tab=tags&page=1&ordering=last_updated)
+
 ```
 ---
 kind: pipeline
@@ -143,14 +178,17 @@ steps:
         # 安装时，配置淘宝镜像
       - npm i --registry=https://registry.npm.taobao.org
 ```
+
 ## [Drone agent](https://docs.drone.io/runner/docker/installation/linux/)
 
-#### 下载Drone agent镜像
+#### 下载 Drone agent 镜像
+
 ```
 docker pull drone/drone-runner-docker:1
 ```
 
-#### 安装容器并启动Docker
+#### 安装容器并启动 Docker
+
 ```
 docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
@@ -167,10 +205,11 @@ docker run -d \
   drone/drone-runner-docker:1
 ```
 
-## 配置rsync
+## 配置 rsync
+
 [drone 插件市场](https://plugins.drone.io/)
 
-PS:  这里的插件有些不是最新的，最好根据镜像地址，去github上找原作者给的最新说明
+PS: 这里的插件有些不是最新的，最好根据镜像地址，去 github 上找原作者给的最新说明
 
 ```
 - name: rsync production
@@ -194,13 +233,16 @@ PS:  这里的插件有些不是最新的，最好根据镜像地址，去github
 
 添加密匙时，询问是否允许拉取请求，担心不安全，也可以不勾选
 
-### DronceCI不监听的问题
-当DronceCI执行失败，再次提交代码没有触发自动构建时，可以点击“NEW BUILD”按钮，重新构建
+### DronceCI 不监听的问题
+
+当 DronceCI 执行失败，再次提交代码没有触发自动构建时，可以点击“NEW BUILD”按钮，重新构建
 
 ## drone curl
+
 [Pipelines Steps](https://docs.drone.io/pipeline/docker/syntax/steps/)
 
 微信机器人
+
 ```
 - name: notify
   image: curlimages/curl
@@ -216,7 +258,9 @@ PS:  这里的插件有些不是最新的，最好根据镜像地址，去github
 ```
 
 ## [Drone Promotions](https://docs.drone.io/promote/)
-配置Drone部署流程，多环境部署
+
+配置 Drone 部署流程，多环境部署
+
 ```
 - name: rsync production
     image: drillster/drone-rsync
@@ -266,50 +310,59 @@ PS:  这里的插件有些不是最新的，最好根据镜像地址，去github
         event:
             - promote
 ```
-[执行Drone Cli build命令](https://docs.drone.io/cli/build/drone-build-promote/)
+
+[执行 Drone Cli build 命令](https://docs.drone.io/cli/build/drone-build-promote/)
+
 ```
 drone build promote mrzhang90/DroneCI 41 production
 
 drone build promote mrzhang90/DroneCI 41 staging
 ```
+
 ## [Drone CLI](https://docs.drone.io/cli/install/)
+
 1. 安装
-    ```
-    # 下载
-    curl -L https://github.com/drone/drone-cli/releases/latest/download/drone_darwin_amd64.tar.gz | tar zx
-    # 安装
-    sudo cp drone /usr/local/bin
-    ```
+   ```
+   # 下载
+   curl -L https://github.com/drone/drone-cli/releases/latest/download/drone_darwin_amd64.tar.gz | tar zx
+   # 安装
+   sudo cp drone /usr/local/bin
+   ```
 2. 配置
 
-    从drone server服务器管理页面，点击个人头像，即可找到sever和token
-    
-    ```
-    # 配置drone服务器地址：
-    export DRONE_SERVER=http://172.16.102.130
-    # 配置drone token：
-    export DRONE_TOKEN=IDQmPV7KL7XwXg6HVZo0XRSPV2COB6ON
-    ```
+   从 drone server 服务器管理页面，点击个人头像，即可找到 sever 和 token
+
+   ```
+   # 配置drone服务器地址：
+   export DRONE_SERVER=http://172.16.102.130
+   # 配置drone token：
+   export DRONE_TOKEN=IDQmPV7KL7XwXg6HVZo0XRSPV2COB6ON
+   ```
+
 3. 添加密钥
-    ```
-    # 切换到.ssh目录
-    cd .ssh
-    
-    # 添加密钥
-    drone secret add \
-        --repository mrzhang90/DroneCI \
-        --name rsync_key \
-        # 添加本地的密钥文件，这个公钥一定是服务器有保存的
-        --data @./id_rsa \
-    ```
-    密钥添加成功后，在Drone服务器管理平台的Settings->Secrets下，可以看到添加的密钥
-    
+
+   ```
+   # 切换到.ssh目录
+   cd .ssh
+
+   # 添加密钥
+   drone secret add \
+       --repository mrzhang90/DroneCI \
+       --name rsync_key \
+       # 添加本地的密钥文件，这个公钥一定是服务器有保存的
+       --data @./id_rsa \
+   ```
+
+   密钥添加成功后，在 Drone 服务器管理平台的 Settings->Secrets 下，可以看到添加的密钥
+
 ## jsonnet
-解决yml文件越写越庞大，jsonnet可以复用
+
+解决 yml 文件越写越庞大，jsonnet 可以复用
 
 [drone jsonnet](https://docs.drone.io/template/jsonnet/)
 
-[jsonnet官方文档](https://jsonnet.org/)
+[jsonnet 官方文档](https://jsonnet.org/)
 
 ## [Drone API](https://docs.drone.io/api/overview/)
+
 [Drone API - node](https://github.com/drone/drone-node)
