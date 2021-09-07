@@ -31,6 +31,8 @@ export default {
 
   computed: {
     link () {
+      // 路由不存在，不解析路由
+      if(!this.item.link) return ''
       return ensureExt(this.item.link)
     },
 
