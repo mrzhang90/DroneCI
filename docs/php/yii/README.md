@@ -118,3 +118,12 @@ php-fpm ERROR: No pool defined. at least one pool section must be specified in c
 ```
 sudo php-fpm
 ```
+
+## YII
+
+[YII 中文文档](https://www.yiichina.com/doc/guide/2.0/start-installation)
+[YII 下载](https://www.yiiframework.com/download)
+
+## 参考
+
+[Mac 配置 nginx、php 运行环境](https://www.cnblogs.com/niuben/p/14575854.html)
