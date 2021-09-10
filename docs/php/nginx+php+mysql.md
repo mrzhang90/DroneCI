@@ -1,38 +1,16 @@
 ---
-title: 前端架构分离实践之后端开发
-date: 2021-09-08 10:19:56
-permalink: /pages/35c122/
+title: Nginx + PHP + MySql
+date: 2021-09-10 11:08:39
+permalink: /pages/4bb668/
 categories:
-  - yii
+  - php
 tags:
   -
 ---
 
-## 单体应用
-
-前后端未分离的项目，叫做单体应用
-
-### MVC 模式
-
-MVC 模式，应该叫做 MVC 架构模式，与设计模式的区别在于，架构模式是设计系统的，设计模式是代码的书写规范
-
-![MVC 模式](../../statics/images/MVC.png)
-
-#### 一个典型的 web MVC 流程：
-
-- Controller 截取用户发出的请求
-- Controller 调用 Model 完成状态的读写操作
-- Controller 把数据传递给 View
-- View 渲染最终结果并呈现给用户
-
-#### 深入理解 MVC 模式
-
-![MVC 模式](../../statics/images/MVC2.png)
-
-## 配置环境
-
 ### 安装 XAMPP
 
+简单模式，安装集成环境，就不需要在单独安装 nginx、php、mysql 啦
 https://www.apachefriends.org/download_success.html
 
 ### 安装 mysql
@@ -113,17 +91,23 @@ cp www.conf.default www.conf
 php-fpm ERROR: No pool defined. at least one pool section must be specified in config file
 ```
 
-4. 启动 php-form
+4. 启动 php-fpm
 
 ```
 sudo php-fpm
 ```
 
-## YII
+5. php-fpm 比较坑，没有重启，当修改配置，需要手动 kill
 
-[YII 中文文档](https://www.yiichina.com/doc/guide/2.0/start-installation)
-[YII 下载](https://www.yiiframework.com/download)
+```
+# 查看php进程
+ps aux | grep php
+# 查看9000端口占用情况
+sudo lsof -i :9000
+# 干掉PID
+sudo kill -9 1770
+```
 
 ## 参考
 
-[Mac 配置 nginx、php 运行环境](https://www.cnblogs.com/niuben/p/14575854.html)
+[详解 nginx、php-fpm 和 mysql 用户权限](https://www.cnblogs.com/lamp01/p/9347822.html)

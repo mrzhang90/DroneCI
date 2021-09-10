@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo 1",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "start": "docs:dev",
+    "publish:online": "node scripts/deploy.js test01"
   },
   "author": "",
   "license": "ISC",
