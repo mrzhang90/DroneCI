@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo 1",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "start": "docs:dev",
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs",
+    "start": "yarn dev",
     "publish:online": "node scripts/deploy.js test01"
   },
   "author": "",
