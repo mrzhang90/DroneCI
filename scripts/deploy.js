@@ -35,8 +35,8 @@ if (shell.exec('npm run test').code !== 0) {
 
 // 构建
 console.log(colors.yellow('🚚  开始构建')); // outputs green text
-if (shell.exec('npm run docs:build').code !== 0) {
-  shell.echo('Error: npm run docs:build failed');
+if (shell.exec('npm run build').code !== 0) {
+  shell.echo('Error: npm run build failed');
   shell.exit(1);
 }
 
@@ -49,7 +49,7 @@ const rsync = Rsync.build({
   shell: 'ssh',
 });
 
-rsync.execute(function (error, code, cmd) {
+rsync.execute(function(error, code, cmd) {
   // we're done
   console.log(error, code, cmd);
   console.log(colors.blue('🚘  部署完成')); // outputs green text
