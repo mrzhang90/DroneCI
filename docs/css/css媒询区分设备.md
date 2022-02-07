@@ -34,8 +34,10 @@ iPhone 6Plus:
 
 iPad 竖屏:
 
-```
-@media screen and (device-aspect-ratio: 3/4) {}
+```js
+//@media screen and (device-aspect-ratio: 3/4) {}
+/*适应iPad 宽度在540-1024之间*/
+@media screen and (min-width: 540px) and (max-width: 1024px) {}
 ```
 
 ## 参考
