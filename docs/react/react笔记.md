@@ -5,21 +5,27 @@ permalink: /pages/cd74a5/
 categories:
   - react
 tags:
-  - 
+  -
 ---
-## React三大体系
-1. React.js 用于Web开发和组件的编写
+
+## React 三大体系
+
+1. React.js 用于 Web 开发和组件的编写
 2. ReactNative 用户移动端开发
 3. ReactVR 用于虚拟现实技术的开发
 
 ## React Fiber
-React Fiber版本，也就是React16版本
 
-## React 和 Vue对比
-React.js相对于Vue.js它的灵活性和协作性更好些，所以在处理复杂项目或公司核心项目时，React是我的第一选择。Vue.js有着丰富的API，实现起来更简单快速，所以当团队不大，沟通紧密时，我会选择Vue，因为它更快速易用
+React Fiber 版本，也就是 React16 版本
 
-## Fragment标签
-react要求必须在一个组件的最外层包裹一个元素，否则会报错，但有时布局是不需要这个外层标签，这种矛盾在React16已经做了解决，可以用Fragment标签
+## React 和 Vue 对比
+
+React.js 相对于 Vue.js 它的灵活性和协作性更好些，所以在处理复杂项目或公司核心项目时，React 是我的第一选择。Vue.js 有着丰富的 API，实现起来更简单快速，所以当团队不大，沟通紧密时，我会选择 Vue，因为它更快速易用
+
+## Fragment 标签
+
+react 要求必须在一个组件的最外层包裹一个元素，否则会报错，但有时布局是不需要这个外层标签，这种矛盾在 React16 已经做了解决，可以用 Fragment 标签
+
 ```
 import React,{Fragment} from 'react'
 
@@ -34,6 +40,7 @@ import React,{Fragment} from 'react'
 ```
 
 ## bind this
+
 ```
 class Button extends React.Component{
   handleClick(){
@@ -47,35 +54,46 @@ class Button extends React.Component{
   }
 }
 ```
-此时发现，this指向了组件实例，符合预期，~~如果去掉bind(this)，this会指向window~~
 
-### 为何去掉bind this会这样
-首先，JSX实际上是createElement的语法糖
+此时发现，this 指向了组件实例，符合预期，~~如果去掉 bind(this)，this 会指向 window~~
+
+### 为何去掉 bind this 会这样
+
+首先，JSX 实际上是 createElement 的语法糖
+
 ```jsx
-<div>Hello,{this.props.name}</div>
-等价于
-React.createElement('div',null,`Hello,${this.props.name}`)
+<div>Hello,{this.props.name}</div>;
+等价于;
+React.createElement('div', null, `Hello,${this.props.name}`);
 ```
 
-#### createElement伪代码
+#### createElement 伪代码
+
 ```js
-function createElement(dom,param){
-  var domObj = document.createElement(dom)
-  domObj.onClick = param.onclick
+function createElement(dom, param) {
+  var domObj = document.createElement(dom);
+  domObj.onClick = param.onclick;
   domObj.innerHTML = param.conent;
-  return domObj
+  return domObj;
 }
 ```
-可以看到，自定义组件类中onclick绑定的事件，是作为回调函数绑定到domObj.onclick上的
 
-#### onclick事件触发
-button被点击时，会由React作为中介调用回调函数，此时的this指向丢失，就指向了window
+可以看到，自定义组件类中 onclick 绑定的事件，是作为回调函数绑定到 domObj.onclick 上的
 
-### bind this的原理
-#### new关键字
-在使用new关键字时，构造函数（即class）中的this都会强制赋值为新的对象
-#### 使用bind讲this的值绑定在函数中
-#### 除了bind，还可以使用箭头函数方式
+#### onclick 事件触发
+
+button 被点击时，会由 React 作为中介调用回调函数，此时的 this 指向丢失，就指向了 window
+
+### bind this 的原理
+
+#### new 关键字
+
+在使用 new 关键字时，构造函数（即 class）中的 this 都会强制赋值为新的对象
+
+#### 使用 bind 讲 this 的值绑定在函数中
+
+#### 除了 bind，还可以使用箭头函数方式
+
 ```
 class Button extends React.Component{
   handleClick(){
@@ -90,30 +108,83 @@ class Button extends React.Component{
 }
 ```
 
-## JSX中的html解析问题
-如果想在JSX中渲染h1标签，默认是不会生效的，只会把h1打印到页面上，那么可以用dangerouslySetInnerHTML属性解决
+## JSX 中的 html 解析问题
+
+如果想在 JSX 中渲染 h1 标签，默认是不会生效的，只会把 h1 打印到页面上，那么可以用 dangerouslySetInnerHTML 属性解决
+
 ```jsx
 <ul>
-  {
-    this.state.list.map((item,index)=>{
-      return (
-        <li
-          key={index}
-          dangerouslySetInnerHTML={{__html:item}}
-          >
-        </li>
-      )
-    })
-  }
+  {this.state.list.map((item, index) => {
+    return <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>;
+  })}
 </ul>
 ```
 
-## React调试工具-React developer tools
-1. chrom浏览器，菜单中选择更多工具，再选择扩展程序
-2. 点击打开chrom网上应用商店，直接搜索React，出现的第一个就是
-3. 点击添加至Chrom，然后就是等待了
+## React 调试工具-React developer tools
 
-### React developer tools的三种状态
-1. 灰色，这种就是不可使用，说明页面不是React编写
-1. 黑色，说明页面是React编写，并处于生产环境
-1. 红色，说明页面是React编写，并处于调试环境
+1. chrom 浏览器，菜单中选择更多工具，再选择扩展程序
+2. 点击打开 chrom 网上应用商店，直接搜索 React，出现的第一个就是
+3. 点击添加至 Chrom，然后就是等待了
+
+### React developer tools 的三种状态
+
+1. 灰色，这种就是不可使用，说明页面不是 React 编写
+1. 黑色，说明页面是 React 编写，并处于生产环境
+1. 红色，说明页面是 React 编写，并处于调试环境
+
+### Class 组件 与 函数组件
+
+1. class 组件
+
+   1. 创建一个同名的 ES6 class，并且继承于 React.Component
+   2. 添加一个 constructor 构造函数，添加 super(props)继承父类 props
+   3. 添加一个空的 render()方法
+   4. 在 render()方法中，renter 一个 DOM 元素
+   5. 在 render()方法中，使用 this.props、this.state 或 this.方法
+   6. 生命周期，ComponentDidMount 当组件插入 DOM，触发生命周期
+   7. 生命周期，componentWillUnmount 当组件从 DOM 移除，触发生命周期
+
+变更变量时，
+
+```js
+const [userInfo,setUserInfo]=useState({
+  firstName,
+  lastName
+})
+// 函数组件，变更firstName变量一定要带上老的字段
+setUserInfo(s=>{
+  ...s,
+  firstName
+})
+// Class组件，变更firstName变量，state会自动合并的
+this.setState({
+  firstName
+})
+```
+
+### setState
+
+react 会把多个 setState 调用合并成一个调用
+
+```js
+this.setState({
+  count: this.state.count + 1,
+});
+this.setState({
+  count: this.state.count + 1,
+});
+```
+
+所以，以上代码相当于只执行了一次，只会加 1
+如果期望的结果是两次加 1 都生效，那么可以让 setState 接口一个函数而不是对象，这个函数用上一个 state 作为第一个参数，
+
+```
+this.setState({
+  count: this.state.count + 1,
+});
+this.setState((state) => ({
+  count: state.count + 1,
+}));
+```
+
+以上，执行的结果实际加 2
