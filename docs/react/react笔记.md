@@ -132,17 +132,98 @@ class Button extends React.Component{
 1. 黑色，说明页面是 React 编写，并处于生产环境
 1. 红色，说明页面是 React 编写，并处于调试环境
 
-### Class 组件 与 函数组件
+## 多层组件传递数据
 
-1. class 组件
+当需要跨多层组件传递数据时，优先选择**组件组合**
+其次选择**Context**
 
-   1. 创建一个同名的 ES6 class，并且继承于 React.Component
-   2. 添加一个 constructor 构造函数，添加 super(props)继承父类 props
-   3. 添加一个空的 render()方法
-   4. 在 render()方法中，renter 一个 DOM 元素
-   5. 在 render()方法中，使用 this.props、this.state 或 this.方法
-   6. 生命周期，ComponentDidMount 当组件插入 DOM，触发生命周期
-   7. 生命周期，componentWillUnmount 当组件从 DOM 移除，触发生命周期
+## Class 组件 与 函数组件
+
+Class 组件中我们需要自己管理依赖，比如生命周期 componentWillReceiveProps，是在组件接收到 props 时执行的，可以拿到 props 和 nextProps，这样可以手动判断前后 props 是否发生了变化，从而决定是否渲染；
+
+在函数组件中我们把依赖交给 React 自动管理了，虽然减少了手动 diff 的工作量，但也带来了副作用：因为 React 做的是浅比较(Object.is())，所以当任何一个依赖项改变了都应该重新处理 hooks 中的逻辑，如果一个依赖的函数改变了，可能确实是函数体已经改变了。
+
+```js
+const [aa, seta] = useState('a');
+
+const onSubmit: any = () => {
+  console.log('--onSubmit--', aa);
+}; //普通函数，每一次state变化，都会生成一个新的onSubmit
+return (
+  <div>
+    <MemoBtn onSubmit={onSubmit}>{aa}</MemoBtn>
+    <button
+      onClick={() => {
+        seta((s) => (s === 'a' ? 'b' : 'a'));
+      }}
+    >
+      {aa}
+    </button>
+  </div>
+);
+```
+
+虽然 React 对于依赖的处理是合理的，但也需要解决引用变化导致的性能问题，有两种解决方案：
+
+1. 将依赖数组去掉
+2. 想办法让引用不变化，利用 useCallback、useMemo、React.memo 来解决函数引用的问题
+   useCallback、useMemo 可以用来避免对象无效重复的生成，memo 可以对 props 做浅比较
+
+   ```js
+   //MemoBtn组件
+   export default React.memo(({ onSubmit, children }: any) => {
+     //memo,默认对props做一次浅比较，如果props没有变化，则子组件不会重新执行
+     console.log('--I am a memo btn--');
+     return <button onClick={onSubmit}>按钮-{children}</button>;
+   });
+   ```
+
+   ```js
+   // 父组件
+   const [aa, seta] = useState('a');
+   const aaRef = useRef aa;
+   useLayoutEffect(() => {
+     aaRef.current = aa;
+   }, [aa]);
+
+   // const onSubmit: any = useMemo(() => {//这里用useMemo也可以
+   const onSubmit: any = useCallback(() => {
+     console.log('--onSubmit--', aaRef.current);
+   }, [aaRef]); //ref只在创建时更新，其属性current跟随state变化，所以不会生成新的onSubmit
+   return (
+     <div>
+       <MemoBtn onSubmit={onSubmit}>{aa}</MemoBtn>
+       <button
+         onClick={() => {
+           seta((s) => (s === 'a' ? 'b' : 'a'));
+         }}
+       >
+         {aa}
+       </button>
+     </div>
+   );
+   ```
+
+### 函数组件
+
+```js
+function App(props) {
+  return <h1>hello {props}</h1>;
+}
+```
+
+这种纯函数，没有状态，没有生命周期，也不能代替类
+React Hooks 的设计目的，就是加强函数组件
+
+### class 组件
+
+1.  创建一个同名的 ES6 class，并且继承于 React.Component
+2.  添加一个 constructor 构造函数，添加 super(props)继承父类 props
+3.  添加一个空的 render()方法
+4.  在 render()方法中，renter 一个 DOM 元素
+5.  在 render()方法中，使用 this.props、this.state 或 this.方法
+6.  生命周期，ComponentDidMount 当组件插入 DOM，触发生命周期
+7.  生命周期，componentWillUnmount 当组件从 DOM 移除，触发生命周期
 
 变更变量时，
 
@@ -162,7 +243,7 @@ this.setState({
 })
 ```
 
-### setState
+## setState
 
 react 会把多个 setState 调用合并成一个调用
 
