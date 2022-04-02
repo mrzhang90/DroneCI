@@ -26,7 +26,7 @@ React.js 相对于 Vue.js 它的灵活性和协作性更好些，所以在处理
 
 react 要求必须在一个组件的最外层包裹一个元素，否则会报错，但有时布局是不需要这个外层标签，这种矛盾在 React16 已经做了解决，可以用 Fragment 标签
 
-```
+```js
 import React,{Fragment} from 'react'
 
 ...
@@ -41,16 +41,14 @@ import React,{Fragment} from 'react'
 
 ## bind this
 
-```
-class Button extends React.Component{
-  handleClick(){
-    console.log(this instanceof Button)
+```js
+class Button extends React.Component {
+  handleClick() {
+    console.log(this instanceof Button);
   }
 
-  render(){
-    return (
-      <button onClick={this.handleClick.bind(this)}>点击</button>
-    )
+  render() {
+    return <button onClick={this.handleClick.bind(this)}>点击</button>;
   }
 }
 ```
@@ -94,16 +92,22 @@ button 被点击时，会由 React 作为中介调用回调函数，此时的 th
 
 #### 除了 bind，还可以使用箭头函数方式
 
-```
-class Button extends React.Component{
-  handleClick(){
-    console.log(this instanceof Button)
+```js
+class Button extends React.Component {
+  handleClick() {
+    console.log(this instanceof Button);
   }
 
-  render(){
+  render() {
     return (
-      <button onClick={()=>{this.handleClick}}>点击</button>
-    )
+      <button
+        onClick={() => {
+          this.handleClick;
+        }}
+      >
+        点击
+      </button>
+    );
   }
 }
 ```
@@ -124,7 +128,7 @@ class Button extends React.Component{
 
 1. chrom 浏览器，菜单中选择更多工具，再选择扩展程序
 2. 点击打开 chrom 网上应用商店，直接搜索 React，出现的第一个就是
-3. 点击添加至 Chrom，然后就是等待了
+3. 点击添加至 Chrome，然后就是等待了
 
 ### React developer tools 的三种状态
 
@@ -139,9 +143,9 @@ class Button extends React.Component{
 
 ## Class 组件 与 函数组件
 
-Class 组件中我们需要自己管理依赖，比如生命周期 componentWillReceiveProps，是在组件接收到 props 时执行的，可以拿到 props 和 nextProps，这样可以手动判断前后 props 是否发生了变化，从而决定是否渲染；
+Class 组件中我们需要自己管理依赖，比如生命周期 componentWillReceiveProps，是在组件接收到 props 时执行的，可以拿到 props 和 nextProps，我们需要手动判断前后 props 是否发生了变化，从而决定是否渲染；
 
-在函数组件中我们把依赖交给 React 自动管理了，虽然减少了手动 diff 的工作量，但也带来了副作用：因为 React 做的是浅比较(Object.is())，所以当任何一个依赖项改变了都应该重新处理 hooks 中的逻辑，如果一个依赖的函数改变了，可能确实是函数体已经改变了。
+在函数组件中我们把依赖交给 React 自动管理了，虽然减少了手动 diff 的工作量，但也带来了副作用：因为 React 做的是浅比较(Object.is())，所以当**任何一个依赖项改变了都应该重新处理 hooks 中的逻辑**，如果一个依赖的函数改变了，可能确实是函数体已经改变了。
 
 ```js
 const [aa, seta] = useState('a');
@@ -166,8 +170,16 @@ return (
 虽然 React 对于依赖的处理是合理的，但也需要解决引用变化导致的性能问题，有两种解决方案：
 
 1. 将依赖数组去掉
+
+   ```js
+   //使用useCallback且不做依赖，这样只会创建一次，不会生成新的onSubmit
+   const onSubmit: any = useCallback(() => {
+     console.log('--onSubmit--', aaRef.current);
+   }, []);
+   ```
+
 2. 想办法让引用不变化，利用 useCallback、useMemo、React.memo 来解决函数引用的问题
-   useCallback、useMemo 可以用来避免对象无效重复的生成，memo 可以对 props 做浅比较
+   **useCallback、useMemo 可以避免在每次 state 更新时引用发生变化，memo 可以对 props 做浅比较**
 
    ```js
    //MemoBtn组件
@@ -181,7 +193,7 @@ return (
    ```js
    // 父组件
    const [aa, seta] = useState('a');
-   const aaRef = useRef aa;
+   const aaRef = useRef(aa);
    useLayoutEffect(() => {
      aaRef.current = aa;
    }, [aa]);
