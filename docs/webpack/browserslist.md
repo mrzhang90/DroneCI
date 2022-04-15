@@ -1,0 +1,137 @@
+---
+title: browserslist
+date: 2022-04-15 17:56:25
+permalink: /pages/0570ff/
+categories:
+  - webpack
+tags:
+  -
+---
+
+## browserslist
+
+根据提供的目标浏览器环境，智能添加 css 前缀，js 的 polfil 垫片，兼容旧版浏览器。避免不必要的兼容，提高编译质量
+
+## 使用 browserslist 的工具
+
+1. babel-preset-env
+
+   babel-preset-env 是 babel6 推崇一个 preset，preset 代表的是 babel plugin 的一个集合，相当于一堆 plugin 的统称
+
+   在 babel6 时代，预设名字是 babel-preset-env，在 babel7 之后，改成@babel/preset-env
+
+2. autoprefix
+   是 postcss 用户添加前缀的插件
+3. postcss-preset-env
+   postcss-preset-env 依赖了 autoprefix，而且 postcss-preset-env 包含一些 autoprefix 不支持的特性，so 可以直接使用 postcss-preset-env 替换 autoprefix
+
+## 配置 postcss
+
+创建 .browserslistrc 文件
+
+```
+# Browsers that we support
+
+defaults
+
+last 2 versions
+
+```
+
+配置 wenpack 的 loader
+
+```js
+use: [
+  MiniCssExtractPlugin.loader,
+  'css-loader',
+  {
+    loader: 'postcss-loader',
+    options: {
+      postcssOptions: {
+        plugins: [
+          require('postcss-preset-env'),
+          // require('autoprefixer'),
+          // 这种方式不推荐，so我放到.browserslistrc文件里，其实更推荐的方式是在package.json内添加browserslist:[...]
+          // require('autoprefixer')({
+          //   browsers: [
+          //     'defaults',
+          //     'not ie<11',
+          //     'last 5 versions',
+          //     '> 1%',
+          //   ],
+          // }),
+        ],
+      },
+    },
+  },
+  'less-loader',
+],
+```
+
+- less-loader 要放到最后，因为要先把 less 预发解析成 css 预发，然后再 polyfill
+
+- postcss-preset-env 支持十六进制颜色码，而 autoprefixer 不支持
+
+  ```css
+  /* 8位的十六进制颜色,最后两位是aplha */
+  background-color: #12345678;
+  ```
+
+  postcss-preset-env 解析成
+
+  ```css
+  background-color: rgba(18, 52, 86, 0.47059);
+  ```
+
+## 配置 browserslist
+
+方式 1. 在 package.json 文件插入（推荐）：
+
+```js
+{
+  browserslist: ['> 1%', 'last 2 versions'];
+}
+```
+
+方式 2. 创建.browserslistrc 文件
+
+```
+# Browsers that we support
+
+defaults
+
+last 2 versions
+
+```
+
+## 语法
+
+| 参数                       | 含义                                                    |
+| -------------------------- | ------------------------------------------------------- |
+| > 1%                       | 全球超过 1%的人使用的浏览器                             |
+| > 5% in US                 | 指定国家使用率覆盖                                      |
+| last 2 versions            | 所有浏览器兼容到最后两个版本根据 CanIUse.com 追踪的版本 |
+| Firefox ESR                | 火狐最新版本                                            |
+| Firefox > 20               | 指定浏览器的版本范围                                    |
+| not ie <=8                 | 方向排除部分版本                                        |
+| Firefox 12.1               | 指定浏览器的兼容到指定版本                              |
+| unreleased versions        | 所有浏览器的 beta 测试版本                              |
+| unreleased Chrome versions | 指定浏览器的测试版本                                    |
+| since 2013                 | 2013 年之后发布的所有版本                               |
+
+## `npx browserslist`
+
+配置后，可运行命令 `npx browserslist` 打印出所有浏览器版本支持情况
+
+## caniuse-lite
+
+browserslist 的浏览器数据来源就是 caniuse-lite，而它是 caniuse-db 库的精简版本，是从 caniuse-db 衍化来的
+
+## caniuse-db
+
+caniuse-db 是 npm 包，提供了 caniuse 网站所需的数据
+
+## 参考
+
+[重新认识 caniuse](https://segmentfault.com/a/1190000018495678)
+[postcss-preset-env 和配置抽取](https://juejin.cn/post/7000141573480513550#heading-0)
