@@ -1,0 +1,53 @@
+Arguments: 
+  /Users/zhaoli/.nvm/versions/node/v15.5.0/bin/node /Users/zhaoli/.nvm/versions/node/v15.5.0/bin/yarn add colors yargs -D
+
+PATH: 
+  /Users/zhaoli/flutter/bin:/Users/zhaoli/.nvm/versions/node/v15.5.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/zhaoli/flutter/bin:/Users/zhaoli/.nvm/versions/node/v15.5.0/bin:/Users/zhaoli/.phabricator/arcanist/bin:/Users/zhaoli/.phabricator/arcanist/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/zhaoli/flutter/bin:/Users/zhaoli/.nvm/versions/node/v15.5.0/bin:/Users/zhaoli/.phabricator/arcanist/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  15.5.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/Users/zhaoli/Library/Caches/Yarn/v6/npm-pacote-9.5.12-1e11dd7a8d736bcc36b375a9804d41bb0377bf66-integrity/node_modules/pacote/lib/fetchers/alias.js' -> '/Users/zhaoli/zgs-blog/node_modules/pacote/lib/fetchers/alias.js'
+
+npm manifest: 
+  {
+    "name": "theme-vdoing-blog",
+    "version": "1.0.1",
+    "scripts": {
+      "dev": "vuepress dev docs",
+      "build": "vuepress build docs",
+      "deploy": "bash deploy.sh",
+      "test": "echo 1",
+      "publish": "node scripts/deploy.js test01"
+    },
+    "license": "MIT",
+    "devDependencies": {
+      "dayjs": "^1.9.7",
+      "inquirer": "^7.1.0",
+      "json2yaml": "^1.1.0",
+      "vuepress": "1.9.5",
+      "vuepress-plugin-baidu-autopush": "^1.0.1",
+      "vuepress-plugin-baidu-tongji": "^1.0.1",
+      "vuepress-plugin-comment": "^0.7.3",
+      "vuepress-plugin-demo-block": "^0.7.2",
+      "vuepress-plugin-fulltext-search": "^2.2.1",
+      "vuepress-plugin-one-click-copy": "^1.0.2",
+      "vuepress-plugin-thirdparty-search": "^1.0.2",
+      "vuepress-plugin-zooming": "^1.1.7",
+      "vuepress-theme-vdoing": "^1.11.2",
+      "yamljs": "^0.3.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

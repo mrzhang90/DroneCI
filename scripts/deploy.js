@@ -20,11 +20,11 @@ if (!home_map[targetName]) {
 }
 
 // 安装依赖
-console.log(colors.yellow('🚴 安装依赖')); // outputs green text
-if (shell.exec('npm i').code !== 0) {
-  shell.echo('Error: npm i failed');
-  shell.exit(1);
-}
+// console.log(colors.yellow('🚴 安装依赖')); // outputs green text
+// if (shell.exec('npm i').code !== 0) {
+//   shell.echo('Error: npm i failed');
+//   shell.exit(1);
+// }
 
 // 测试
 console.log(colors.yellow('🚗 开始测试')); // outputs green text

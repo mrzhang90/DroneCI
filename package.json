@@ -1,25 +1,32 @@
 {
-  "name": "drone",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "theme-vdoing-blog",
+  "version": "1.0.1",
   "scripts": {
-    "test": "echo 1",
     "dev": "vuepress dev docs",
     "build": "vuepress build docs",
-    "start": "yarn dev",
-    "publish:online": "node scripts/deploy.js test01"
+    "deploy": "bash deploy.sh",
+    "test": "echo 1",
+    "publish": "node scripts/deploy.js test01"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "rsync": "^0.6.1",
-    "shelljs": "^0.8.4",
-    "vuepress": "^1.8.2"
-  },
-  "dependencies": {
     "colors": "^1.4.0",
-    "vuepress-theme-vdoing": "^1.8.3",
-    "yargs": "^17.1.1"
+    "dayjs": "^1.9.7",
+    "inquirer": "^7.1.0",
+    "json2yaml": "^1.1.0",
+    "rsync": "^0.6.1",
+    "shelljs": "^0.8.5",
+    "vuepress": "1.9.5",
+    "vuepress-plugin-baidu-autopush": "^1.0.1",
+    "vuepress-plugin-baidu-tongji": "^1.0.1",
+    "vuepress-plugin-comment": "^0.7.3",
+    "vuepress-plugin-demo-block": "^0.7.2",
+    "vuepress-plugin-fulltext-search": "^2.2.1",
+    "vuepress-plugin-one-click-copy": "^1.0.2",
+    "vuepress-plugin-thirdparty-search": "^1.0.2",
+    "vuepress-plugin-zooming": "^1.1.7",
+    "vuepress-theme-vdoing": "^1.11.2",
+    "yamljs": "^0.3.0",
+    "yargs": "^3.32.0"
   }
 }
